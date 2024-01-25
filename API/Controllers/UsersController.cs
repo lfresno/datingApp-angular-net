@@ -1,10 +1,12 @@
 ﻿using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
+[Authorize] //se usa en general para todos los endpoints de este controlador, a no ser que alguno especifique lo contratio
 public class UsersController : BaseApiController
 {
     private readonly DataContext _context;
@@ -15,6 +17,7 @@ public class UsersController : BaseApiController
         _context = context;
     }
 
+    [AllowAnonymous]
     [HttpGet]   //al hacer un http get se hace el siguiente método: GetUser()
     // public  ActionResult<IEnumerable<AppUser>> GetUsers() => MÉTODO SÍNCRONO
     public async Task<IEnumerable<AppUser>> GetUsers() //MÉTODO ASÍNCRONO (no queremos bloquear la app)
@@ -24,6 +27,7 @@ public class UsersController : BaseApiController
         return users;
     }
 
+    //[Authorize]   si se especifica al principio, no hace falta aquí
     [HttpGet("{id}")]   //api/users/2
     public async Task<AppUser> GetUser(int id)
     {
