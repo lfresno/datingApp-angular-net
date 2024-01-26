@@ -1,0 +1,19 @@
+<form [formGroup]="loginForm" class="d-flex" (ngSubmit)="onSubmit()" autocomplete="off">
+
+    <input class="form-control" type="text" formControlName="username" placeholder="Username">
+    <input class="form-control mx-3" type="password" formControlName="password" placeholder="Password">
+    <button class="btn btn-outline-success" type="submit">Login</button>
+</form>
+
+<div class="row">
+  @if (loginForm.invalid) {
+    <div class="col" *ngIf="isValidField('username')">
+      <span class="form-text text-danger" > Incorrect username </span>
+    </div>
+
+    <div class="col" *ngIf="isValidField('password')">
+      <span class="form-text text-danger" > Incorrect password </span>
+    </div>
+
+  }
+</div>
