@@ -7,7 +7,7 @@
 
     <div class="collapse navbar-collapse" id="navbarsExample03">
 
-      @if (loggedIn()) {
+      @if (currentUser$ | async) {
         <ul class="navbar-nav me-auto mb-2 mb-sm-0">
 
           @for (item of navItems; track item.path) {
@@ -27,14 +27,13 @@
           </li>
         </ul>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
+        <div class="dropdown" dropdown>
+          <a class="dropdown-toggle text-light text-decoration-none" dropdownToggle> Welcome user</a>
+          <div class="dropdown-menu" *dropdownMenu>
+            <a class="dropdown-item"> Edit Profile </a>
+            <a class="dropdown-item" (click)="logout()"> Logout </a>
+          </div>
+        </div>
 
       } @else {
         <div class="collapse navbar-collapse justify-content-md-center">

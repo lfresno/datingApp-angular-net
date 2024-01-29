@@ -13,6 +13,9 @@ import { LoginFormComponent } from './shared/login-form/login-form.component';
 import { MatchesPageComponent } from './pages/matches-page/matches-page.component';
 import { ListPageComponent } from './pages/list-page/list-page.component';
 import { MessagesPageComponent } from './pages/messages-page/messages-page.component';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { HomePageComponent } from './pages/home-page/home-page.component';
+import { RegisterFormComponent } from './shared/register-form/register-form.component';
 
 @NgModule({
   declarations: [
@@ -22,14 +25,17 @@ import { MessagesPageComponent } from './pages/messages-page/messages-page.compo
     LoginFormComponent,
     MatchesPageComponent,
     ListPageComponent,
-    MessagesPageComponent
+    MessagesPageComponent,
+    HomePageComponent,
+    RegisterFormComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BsDropdownModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

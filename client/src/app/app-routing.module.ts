@@ -3,8 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { ListPageComponent } from './pages/list-page/list-page.component';
 import { MatchesPageComponent } from './pages/matches-page/matches-page.component';
 import { MessagesPageComponent } from './pages/messages-page/messages-page.component';
+import { HomePageComponent } from './pages/home-page/home-page.component';
 
 export const routes: Routes = [
+  {
+    path: 'home',
+    title: 'Home',
+    component: HomePageComponent
+  },
   {
     path: 'matches',
     title: 'Matches',
@@ -22,7 +28,7 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'list'
+    redirectTo: 'home'
   }
 
 ];
