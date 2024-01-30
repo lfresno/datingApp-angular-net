@@ -16,6 +16,11 @@ import { MessagesPageComponent } from './pages/messages-page/messages-page.compo
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { RegisterFormComponent } from './shared/register-form/register-form.component';
+import { MemberListComponent } from './members/member-list/member-list.component';
+import { MemberDetailComponent } from './members/member-detail/member-detail.component';
+import { ListsComponent } from './shared/lists/lists.component';
+import { MessagesComponent } from './shared/messages/messages.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -27,7 +32,11 @@ import { RegisterFormComponent } from './shared/register-form/register-form.comp
     ListPageComponent,
     MessagesPageComponent,
     HomePageComponent,
-    RegisterFormComponent
+    RegisterFormComponent,
+    MemberListComponent,
+    MemberDetailComponent,
+    ListsComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +44,10 @@ import { RegisterFormComponent } from './shared/register-form/register-form.comp
     HttpClientModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

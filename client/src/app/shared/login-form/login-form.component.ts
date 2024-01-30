@@ -1,6 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccountService } from '../../services/account.service';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login-form',
@@ -11,6 +13,8 @@ export class LoginFormComponent {
 
   private fb = inject(FormBuilder);
   private accountService = inject(AccountService);
+  private router = inject(Router);
+  private toaster = inject(ToastrService);
 
   public loginForm : FormGroup = this.fb.group({
     username: ['', [Validators.required]],
@@ -43,8 +47,13 @@ export class LoginFormComponent {
         next: response => {
           console.log(response);
           this.accountService.loggedIn.update( logged => true);
+          this.router.navigate(['/members']);
+
         },
-        error: error => console.log(error)
+        error: error => {
+          console.log(error);
+          this.toaster.error(error.error);
+        }
       })
   }
 

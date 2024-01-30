@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccountService } from '../../services/account.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register-form',
@@ -11,6 +12,7 @@ export class RegisterFormComponent {
 
   private fb = inject(FormBuilder);
   private accountService = inject(AccountService);
+  private toaster = inject(ToastrService);
   @Output() cancelRegister = new EventEmitter();
 
   model : any = {};
@@ -44,7 +46,7 @@ export class RegisterFormComponent {
           console.log(response);
           this.cancel();  //cerrar form
         },
-        error: error => console.log(error)
+        error: error => this.toaster.error(error.error)
       })
   }
 

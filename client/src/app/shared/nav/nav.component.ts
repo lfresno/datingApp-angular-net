@@ -14,10 +14,12 @@ export class NavComponent implements OnInit{
   private accountService = inject(AccountService);
   public loggedIn = computed(() => this.accountService.loggedIn());
   currentUser$ : Observable<User | null> = of(null);
+  public user? : User;
 
   public navItems = routes
   .flat()
   .filter( route => !route.path?.includes('**'))
+  .filter( route => !route.path?.includes(':'))
 
   ngOnInit(): void {
     this.currentUser$ = this.accountService.currentUser$;
