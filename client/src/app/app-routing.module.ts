@@ -7,6 +7,9 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { MemberListComponent } from './members/member-list/member-list.component';
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
 import { authGuard } from './guards/auth.guard';
+import { TestErrorComponent } from './errors/test-error/test-error.component';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
+import { ServerErrorComponent } from './errors/server-error/server-error.component';
 
 export const routes: Routes = [
   {
@@ -43,6 +46,19 @@ export const routes: Routes = [
     title: 'Matches',
     component: MatchesPageComponent,
     canActivate: [authGuard]
+  },
+  {
+    path: 'errors',
+    title: 'Errors',
+    component: TestErrorComponent
+  },
+  {
+    path: 'not-found',
+    component: NotFoundComponent
+  },
+  {
+    path: 'server-error',
+    component: ServerErrorComponent
   },
   {
     path: '**',

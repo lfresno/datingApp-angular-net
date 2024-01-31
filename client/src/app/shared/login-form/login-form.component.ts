@@ -18,7 +18,7 @@ export class LoginFormComponent {
 
   public loginForm : FormGroup = this.fb.group({
     username: ['', [Validators.required]],
-    password: ['', [Validators.required]]
+    password: ['', [Validators.required, Validators.maxLength(8), Validators.minLength(4)]]
   })
 
   public model : any = {};
@@ -49,11 +49,11 @@ export class LoginFormComponent {
           this.accountService.loggedIn.update( logged => true);
           this.router.navigate(['/members']);
 
-        },
-        error: error => {
-          console.log(error);
-          this.toaster.error(error.error);
-        }
+        },  //el error ahora se maneja con el interceptor, no hace falta hacerlo aquí
+        // error: error => {
+        //   console.log(error);
+        //   this.toaster.error(error.error);
+        // }
       })
   }
 

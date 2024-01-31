@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
@@ -21,6 +21,10 @@ import { MemberDetailComponent } from './members/member-detail/member-detail.com
 import { ListsComponent } from './shared/lists/lists.component';
 import { MessagesComponent } from './shared/messages/messages.component';
 import { ToastrModule } from 'ngx-toastr';
+import { TestErrorComponent } from './errors/test-error/test-error.component';
+import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
+import { ServerErrorComponent } from './errors/server-error/server-error.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +40,10 @@ import { ToastrModule } from 'ngx-toastr';
     MemberListComponent,
     MemberDetailComponent,
     ListsComponent,
-    MessagesComponent
+    MessagesComponent,
+    TestErrorComponent,
+    NotFoundComponent,
+    ServerErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +56,10 @@ import { ToastrModule } from 'ngx-toastr';
       positionClass: 'toast-bottom-right'
     })
   ],
-  providers: [],
+  providers: [
+    //la opción multi: true indica que queremos añadir nuestros interceptores a los ya existentes, en lugar de sustituirlos
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
