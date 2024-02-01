@@ -21,6 +21,9 @@ namespace API.Extensions
 
             services.AddScoped<ITokenService, TokenService>();  //hay más tipos de Add y se usan dependiendo de las necesidades. Este suele ser el más usado
 
+            services.AddScoped<IUserRepository, UserRepository>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             return services;
         }
 
