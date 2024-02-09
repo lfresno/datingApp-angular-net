@@ -6,9 +6,13 @@
   </div>
 
   <div class="col-8">
-    <div class="alert alert-info">
-      <p><strong>Information: </strong> Any unsaved changes will be lost </p>
-    </div>
+
+    @if (myForm.dirty) {
+      <div class="alert alert-info">
+        <p><strong>Information: </strong> Any unsaved changes will be lost </p>
+      </div>
+    }
+
   </div>
   <div class="col-4">
     <div class="card">
@@ -33,7 +37,7 @@
         </div>
       </div>
       <div class="card-footer">
-        <button class="btn btn-success"> Save changes </button>
+        <button class="btn btn-success" type="submit" form="editForm" [disabled]="!myForm.dirty"> Save changes </button>
       </div>
 
     </div>
@@ -42,7 +46,7 @@
   <div class="col-8">
     <tabset class="member-tabset">
       <tab heading="About {{member.knownAs}}">
-        <form [formGroup]="myForm">
+        <form [formGroup]="myForm" (ngSubmit)="updateMember()" id="editForm">
 
           <h4 class="mt-2">Description</h4>
           <textarea class="form-control"

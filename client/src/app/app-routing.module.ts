@@ -11,6 +11,7 @@ import { TestErrorComponent } from './errors/test-error/test-error.component';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
+import { preventUnsavedChangesGuard } from './guards/prevent-unsaved-changes.guard';
 
 export const routes: Routes = [
   {
@@ -34,7 +35,8 @@ export const routes: Routes = [
     path: 'member/edit',
     title: 'Edit Member',
     component: MemberEditComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    canDeactivate: [preventUnsavedChangesGuard]
   },
   {
     path: 'list',
