@@ -1,4 +1,5 @@
-﻿using API.Data;
+﻿using System.Security.Claims;
+using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
@@ -50,6 +51,25 @@ public class UsersController : BaseApiController
 
         //usamos esto para que la query sea más eficiente
         return await _userRepository.GetMemberAsync(username);
+    }
+
+    [HttpPut]
+    public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
+    {
+        var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var user = await _userRepository.GetUserByUsernameAsync(username);
+
+        if(user == null) return NotFound();
+
+        //se actualizan y sobreescriben todas las propiedades del usuario con las del memberUpdatedDto
+        _mapper.Map(memberUpdateDto, user);
+
+        //este return significa: todo bien pero no tengo nada más que mandar
+        if(await _userRepository.SaveAllAsync()) return NoContent();
+
+        //si no se han hecho cambios, tendremos esta respuesta
+        return BadRequest("Failed to update user");
+
     }
 
 }

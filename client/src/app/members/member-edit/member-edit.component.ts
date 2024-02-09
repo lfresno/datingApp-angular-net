@@ -106,9 +106,15 @@ export class MemberEditComponent implements OnInit{
     this.member!.city = this.myForm.controls['city'].value;
 
     console.log(this.member);
-    this.toastr.success('Profile updated succesfully');
 
-    this.myForm.reset(this.member);
+    this.memberService.updateMember(this.member).subscribe({
+      next: _ => {
+        this.toastr.success('Profile updated succesfully');
+        this.myForm.reset(this.member);
+      },
+      error: _ => this.toastr.error('Error saving changes! Please try again')
+    })
+
   }
 
 
