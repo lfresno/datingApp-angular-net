@@ -20,6 +20,8 @@ export class NavComponent implements OnInit{
   .flat()
   .filter( route => !route.path?.includes('**'))
   .filter( route => !route.path?.includes(':'))
+  .filter( route => !route.path?.includes('members/:username'))
+  .filter( route => !route.path?.includes('member/edit'))
 
   ngOnInit(): void {
     this.currentUser$ = this.accountService.currentUser$;
