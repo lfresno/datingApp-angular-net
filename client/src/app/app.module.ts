@@ -5,6 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+//esto hay que ordenarlo
+
 import { AppComponent } from './app.component';
 import { UsersListComponent } from './shared/users-list/users-list.component';
 import { NavComponent } from './shared/nav/nav.component';
@@ -32,6 +34,9 @@ import { MemberEditComponent } from './members/member-edit/member-edit.component
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
+import { TextInputComponent } from './shared/text-input/text-input.component';
+import { DatePickerComponent } from './shared/date-picker/date-picker.component';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
   declarations: [
@@ -53,7 +58,9 @@ import { PhotoEditorComponent } from './members/photo-editor/photo-editor.compon
     ServerErrorComponent,
     MemberCardComponent,
     MemberEditComponent,
-    PhotoEditorComponent
+    PhotoEditorComponent,
+    TextInputComponent,
+    DatePickerComponent
   ],
   imports: [
     BrowserModule,
@@ -66,7 +73,8 @@ import { PhotoEditorComponent } from './members/photo-editor/photo-editor.compon
       positionClass: 'toast-bottom-right'
     }),
     TabsModule.forRoot(),
-    NgxSpinnerModule.forRoot({ type: 'ball-grid-beat' })
+    NgxSpinnerModule.forRoot({ type: 'ball-grid-beat' }),
+    BsDatepickerModule.forRoot()
   ],
   providers: [
     //la opción multi: true indica que queremos añadir nuestros interceptores a los ya existentes, en lugar de sustituirlos

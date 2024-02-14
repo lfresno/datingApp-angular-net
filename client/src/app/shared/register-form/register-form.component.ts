@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { AccountService } from '../../services/account.service';
 import { ToastrService } from 'ngx-toastr';
 
@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './register-form.component.html',
   styleUrl: './register-form.component.css'
 })
-export class RegisterFormComponent {
+export class RegisterFormComponent implements OnInit{
 
   private fb = inject(FormBuilder);
   private accountService = inject(AccountService);
@@ -16,15 +16,42 @@ export class RegisterFormComponent {
   @Output() cancelRegister = new EventEmitter();
 
   model : any = {};
+  maxDate : Date = new Date();
 
   public registerForm : FormGroup = this.fb.group({
+    gender : ['male'],
     username : ['', [Validators.required]],
+    knownAs : ['', [Validators.required]],
+    dateOfBirth : ['', [Validators.required]],
+    city : ['', [Validators.required]],
+    country : ['', [Validators.required]],
     password : ['', [Validators.required, Validators.maxLength(8), Validators.minLength(4)]],
+    confirmPassword : ['', [Validators.required, this.matchValues('password')]],
 
   });
 
+  ngOnInit(): void {
+    this.maxDate.setFullYear(this.maxDate.getFullYear() - 18);  //para comprobar que es mayor de edad
+  }
+
   isValidField( field : string) : boolean | null {
+
+    // if(field == 'confirmPassword'){
+    //   //passwords are not the same
+    //   if(this.registerForm.controls['confirmPassword'].value != this.registerForm.controls['password'].value){
+    //     return this.registerForm.controls[field].errors && this.registerForm.controls[field].touched;
+    //   }else{  //invalid password
+    //     return this.registerForm.controls['password'].errors && this.registerForm.controls['password'].touched;
+    //   }
+    // }
+
     return this.registerForm.controls[field].errors && this.registerForm.controls[field].touched;
+  }
+
+  matchValues( matchTo : string) : ValidatorFn{
+    return (control : AbstractControl) => {
+      return control.value === control.parent?.get(matchTo)?.value ? null : {notMatching : true}
+    }
   }
 
 
