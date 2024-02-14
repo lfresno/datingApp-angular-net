@@ -6,6 +6,7 @@ using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,28 +17,31 @@ namespace API.Controllers
     {
         private readonly DataContext _context;
         private readonly ITokenService _tokenService;
+        private readonly IMapper _mapper;
 
-        public AccountController(DataContext context, ITokenService tokenService)
+        public AccountController(DataContext context, ITokenService tokenService, IMapper mapper)
         {
             _context = context;
             _tokenService = tokenService;
+            _mapper = mapper;
         }
 
         [HttpPost("register")]  //spi/account/register
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
-            if(await UserExists(registerDto.Username)) return BadRequest("username taken");
+            if (await UserExists(registerDto.Username)) return BadRequest("username taken");
+
+            var user = _mapper.Map<AppUser>(registerDto);
 
             //usamos using porque no vamos a necesitar esta variable fuera de este método. Lo borra autmáticamente después y nos ahorramos basura
             //en memoria y código
             using var hmac = new HMACSHA512();  //crea un random HASH para codificar la contraseña
 
-            var user = new AppUser
-            {
-                UserName = registerDto.Username.ToLower(),  //guardamos en lowercase
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-                PasswordSalt = hmac.Key
-            };
+
+            user.UserName = registerDto.Username.ToLower();  //guardamos en lowercase
+            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password));
+            user.PasswordSalt = hmac.Key;
+
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -46,7 +50,8 @@ namespace API.Controllers
             {
                 Username = user.UserName,
                 Token = _tokenService.CreateToken(user),
-                PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url                
+                KnownAs = user.KnownAs
+                //PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url
             };
         }
 
@@ -68,21 +73,22 @@ namespace API.Controllers
 
             var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
 
-            for(int i=0; i<computedHash.Length; i++)    //comprobamos cada byte del array
+            for (int i = 0; i < computedHash.Length; i++)    //comprobamos cada byte del array
             {
-                if(computedHash[i] != user.PasswordHash[i]) return Unauthorized("invalid password");
+                if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("invalid password");
             }
 
             return new UserDto
             {
                 Username = user.UserName,
+                KnownAs = user.KnownAs,
                 Token = _tokenService.CreateToken(user),
                 PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url
             };
         }
 
         private async Task<bool> UserExists(string username)
-        {   
+        {
             //en C# no usamos el ===, simplemente ==
             return await _context.Users.AnyAsync(user => user.UserName == username.ToLower());
         }
