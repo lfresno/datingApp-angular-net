@@ -1,7 +1,7 @@
 <h2 class="text-center text-primary"> Sign up </h2>
 <hr>
 
-<form [formGroup]="registerForm" (ngSubmit)="register()">
+<form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && register()">
 
   <div class="mb-3">
     <label style="margin-right: 10px;"> I am a: </label>
@@ -82,8 +82,16 @@
     </div>
   </div> -->
 
+  <div class="row" *ngIf="validationErrors">
+    <ul class="text-danger">
+      @for (error of validationErrors; track $index) {
+        <li>{{error}}</li>
+      }
+    </ul>
+  </div>
+
   <div class="text-center">
-    <button class="btn btn-success me-2" type="submit"> Register </button>
+    <button class="btn btn-success me-2" type="submit" [disabled]="registerForm.invalid"> Register </button>
     <button class="btn btn-default me-2" type="button" (click)="cancel()"> Cancel </button>
   </div>
 
@@ -105,6 +113,6 @@
 
   }
 </div> -->
-
+<!--
 <p>{{registerForm.value | json}}</p>
-<p>{{registerForm.status | json}}</p>
+<p>{{registerForm.status | json}}</p> -->

@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { AccountService } from '../../services/account.service';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-form',
@@ -13,10 +14,12 @@ export class RegisterFormComponent implements OnInit{
   private fb = inject(FormBuilder);
   private accountService = inject(AccountService);
   private toaster = inject(ToastrService);
+  private router = inject(Router);
   @Output() cancelRegister = new EventEmitter();
 
-  model : any = {};
+  // model : any = {};
   maxDate : Date = new Date();
+  validationErrors : string[] | undefined;
 
   public registerForm : FormGroup = this.fb.group({
     gender : ['male'],
@@ -61,24 +64,32 @@ export class RegisterFormComponent implements OnInit{
       return;
     }
 
-    //si el formulario es valido, comprobamos si el login es válido. Esto se comprueba en el backend (se hace la petición)
-    this.model = {
-      username : this.registerForm.controls['username'].value,
-      password : this.registerForm.controls['password'].value
-    }
+    //para guardar la fecha sin horas (solo fecha). Así lo necesita la API
+    const dob = this.getDateOnly(this.registerForm.controls['dateOfBirth'].value);
+    const values = {...this.registerForm.value, dateOfBirth: dob};
 
-    this.accountService.register(this.model)
+    this.accountService.register(values)
       .subscribe({
         next: response => {
           console.log(response);
-          this.cancel();  //cerrar form
+          //this.cancel();  //cerrar form
+          this.router.navigateByUrl('/members');
         },
-        error: error => this.toaster.error(error.error)
+        error: error => this.validationErrors = error
       })
   }
 
   cancel(){
     console.log('cancelled');
     this.cancelRegister.emit(false);
+  }
+
+  private getDateOnly( dob : string | undefined){
+    if(!dob) return;
+
+    let theDob = new Date(dob);;
+
+    return new Date(theDob.setMinutes(theDob.getMinutes()-theDob.getTimezoneOffset()))
+      .toISOString().slice(0, 10);
   }
 }
